@@ -1,0 +1,52 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Workflow Stepper</title>
+    <style>
+        .stepper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 50px;
+        }
+        .step {
+            display: inline-flex;
+            align-items: center;
+            margin: 0 10px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+        }
+        .step.active {
+            background-color: #00a0e9;
+            color: #fff;
+        }
+        .step.active .step-number {
+            font-weight: bold;
+        }
+        .step .step-number {
+            margin-right: 5px;
+        }
+        .step .step-label {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="stepper">
+        <div class="step active">
+            <div class="step-number">1</div>
+            <div class="step-label">Step 1</div>
+        </div>
+        <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-label">Step 2</div>
+        </div>
+        <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-label">Step 3</div>
+        </div>
+    </div>
+</body>
+</html>
