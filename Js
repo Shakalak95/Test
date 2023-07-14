@@ -1,21 +1,17 @@
-<script>
-    window.onload = function() {
-        var steps = document.querySelectorAll('.step');
-        steps.forEach(function(step, index) {
-            step.addEventListener('click', function() {
-                setActiveStep(index);
-            });
-        });
-    };
+document.getElementById("myForm").addEventListener("submit", function(event) {
+  event.preventDefault(); // Prevent form submission
 
-    function setActiveStep(index) {
-        var steps = document.querySelectorAll('.step');
-        steps.forEach(function(step, stepIndex) {
-            if (stepIndex === index) {
-                step.classList.add('active');
-            } else {
-                step.classList.remove('active');
-            }
-        });
-    }
-</script>
+  var currentStep = document.querySelector(".step-content.active");
+  var nextStep = currentStep.nextElementSibling;
+
+  if (nextStep) {
+    currentStep.classList.remove("active");
+    nextStep.classList.add("active");
+
+    var currentStepIndicator = document.querySelector(".step.active");
+    var nextStepIndicator = currentStepIndicator.nextElementSibling;
+
+    currentStepIndicator.classList.remove("active");
+    nextStepIndicator.classList.add("active");
+  }
+});
