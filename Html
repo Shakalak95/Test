@@ -13,24 +13,36 @@ body {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.steps {
+.stepper {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
   margin-bottom: 20px;
 }
 
 .step {
-  flex-grow: 1;
-  text-align: center;
-  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
   background-color: #999;
-  padding: 10px;
-  border-radius: 4px;
-  cursor: pointer;
+  color: #fff;
+  border-radius: 50%;
+  margin-bottom: 10px;
+  font-weight: bold;
 }
 
 .step.active {
   background-color: #4CAF50;
+}
+
+.step-number {
+  font-size: 20px;
+}
+
+.step-label {
+  margin-left: 10px;
 }
 
 .step-content {
@@ -81,24 +93,26 @@ button[type="submit"]:hover {
   background-color: #45a049;
 }
 
-
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Stepper Workflow</title>
+  <title>Vertical Stepper Workflow</title>
   <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
   <div class="container">
-    <div class="steps">
+    <div class="stepper">
       <div class="step active">
-        Step 1
+        <div class="step-number">1</div>
+        <div class="step-label">Step 1</div>
       </div>
       <div class="step">
-        Step 2
+        <div class="step-number">2</div>
+        <div class="step-label">Step 2</div>
       </div>
       <div class="step">
-        Step 3
+        <div class="step-number">3</div>
+        <div class="step-label">Step 3</div>
       </div>
     </div>
     <form id="myForm">
@@ -126,4 +140,5 @@ button[type="submit"]:hover {
   <script src="script.js"></script>
 </body>
 </html>
+
 
