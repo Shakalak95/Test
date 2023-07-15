@@ -1,0 +1,20 @@
+var stepper1 = new Stepper(document.getElementById('stepper1'));
+var stepper2 = new Stepper(document.getElementById('stepper2'));
+
+// Add event listeners to step triggers for stepper1
+var triggers1 = document.querySelectorAll('#stepper1 .step-trigger');
+triggers1.forEach(function (trigger) {
+  trigger.addEventListener('click', function () {
+    stepper1.next();
+    trigger.scrollIntoView({ behavior: 'smooth', inline: 'center' });
+  });
+});
+
+// Add event listeners to step triggers for stepper2
+var triggers2 = document.querySelectorAll('#stepper2 .step-trigger');
+triggers2.forEach(function (trigger) {
+  trigger.addEventListener('click', function () {
+    stepper2.next();
+    trigger.scrollIntoView({ behavior: 'smooth', inline: 'center' });
+  });
+});
