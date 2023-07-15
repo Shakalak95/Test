@@ -1,0 +1,31 @@
+var stepper = new Stepper(document.getElementById('stepper'));
+
+// JSON data with active step information
+var jsonData = {
+  activeStep: 2 // Example active step number
+};
+
+// Add event listeners to step triggers
+var triggers = document.querySelectorAll('.step-trigger');
+triggers.forEach(function (trigger) {
+  trigger.addEventListener('click', function (e) {
+    var activeStep = jsonData.activeStep;
+    var targetContent = '[data-target="#step-content-' + activeStep + '"]';
+    var contentElement = document.querySelector(targetContent);
+
+    // Scroll to the current active step
+    var container = document.querySelector('.bs-stepper-content');
+    container.scrollTo({
+      top: contentElement.offsetTop,
+      behavior: 'smooth'
+    });
+
+    // Focus on the current active step
+    triggers.forEach(function (trigger) {
+      trigger.classList.remove('active');
+    });
+    contentElement.closest('.step').querySelector('.step-trigger').classList.add('active');
+
+    stepper.next();
+  });
+});
