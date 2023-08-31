@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch and Save Issues to CSV</title>
+</head>
+<body>
+    <h1>Fetch and Save Issues to CSV</h1>
+    <form id="fetchForm">
+        <label for="username">Username:</label>
+        <input type="text" id="username" required>
+        <br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" required>
+        <br>
+        <label for="projectKey">Project Key:</label>
+        <input type="text" id="projectKey" required>
+        <br>
+        <label for="pageSize">Page Size:</label>
+        <input type="number" id="pageSize" required>
+        <br>
+        <button type="submit">Fetch and Save</button>
+    </form>
+
+    <script>
+        document.getElementById('fetchForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const projectKey = document.getElementById('projectKey').value;
+            const pageSize = parseInt(document.getElementById('pageSize').value);
+
+            if (!username || !password || !projectKey || isNaN(pageSize) || pageSize <= 0) {
+                alert('Please provide valid inputs.');
+                return;
+            }
+
+            await fetchAndSaveIssuesToCSV(username, password, projectKey, pageSize);
+        });
+
+        async function fetchAndSaveIssuesToCSV(username, password, projectKey, pageSize) {
+            const baseUrl = 'https://your-sonarqube-instance';
+            const endpoint = '/api/issues/search';
+            const authString = `${username}:${password}`;
+            const encodedAuthString = btoa(authString);
+
+            let currentPage = 1;
+            let hasMorePages = true;
+
+            const csvData = []; // Array to store issue details for CSV
+
+            while (hasMorePages) {
+                const url = `${baseUrl}${endpoint}?projectKeys=${projectKey}&p=${currentPage}&ps=${pageSize}`;
+
+                try {
+                    const response = await fetch(url, {
+                        headers: {
+                            'Authorization': `Basic ${encodedAuthString}`
+                        }
+                    });
+                    const responseData = await response.json();
+
+                    // Iterate through the issues and add details to csvData
+                    for (const issue of responseData.issues) {
+                        csvData.push([
+                            issue.key,
+                            issue.component,
+                            issue.severity,
+                            issue.message
+                            // Add more properties as needed
+                        ]);
+                    }
+
+                    // Check if there are more pages to fetch
+                    if (responseData.paging.total > (currentPage - 1) * pageSize) {
+                        currentPage++;
+                    } else {
+                        hasMorePages = false;
+                        console.log('Pagination complete');
+
+                        // Save csvData to CSV file
+                        saveCsvToFile(csvData);
+                    }
+                } catch (error) {
+                    console.error('Error fetching issues:', error);
+                    hasMorePages = false;
+                }
+            }
+        }
+
+        function saveCsvToFile(csvData) {
+            const csvHeader = 'Key,Component,Severity,Message\n'; // CSV header
+            const csvRows = csvData.map(row => row.join(',')); // Convert rows to comma-separated strings
+            const csvContent = csvHeader + csvRows.join('\n'); // Combine header and rows
+
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'issues.csv';
+            a.textContent = 'Download CSV';
+
+            document.body.appendChild(a);
+        }
+    </script>
+</body>
+</html>
