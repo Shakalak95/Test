@@ -51,6 +51,56 @@ async function changeSonarQubeBranch(projectKey, newBranch) {
     }
 }
 
+
+async function checkAuthenticationToken() {
+    const baseUrl = "https://your-sonarqube-instance";
+    const apiUrl = `${baseUrl}/api/projects/search`;
+
+    try {
+        const response = await fetch(apiUrl, {
+            headers: {
+                'Authorization': 'Bearer your-auth-token' // Replace with your authentication token
+            }
+        });
+
+        if (response.ok) {
+            console.log("Authentication token is valid.");
+        } else {
+            console.log("Authentication token is not valid.");
+        }
+    } catch (error) {
+        console.error("Error checking authentication token:", error);
+    }
+}
+
+// Usage
+checkAuthenticationToken();
+async function checkAuthenticationToken() {
+    const baseUrl = "https://your-sonarqube-instance";
+    const apiUrl = `${baseUrl}/api/projects/search`;
+
+    try {
+        const response = await fetch(apiUrl, {
+            headers: {
+                'Authorization': 'Bearer your-auth-token' // Replace with your authentication token
+            }
+        });
+
+        if (response.ok) {
+            console.log("Authentication token is valid.");
+        } else {
+            console.log("Authentication token is not valid.");
+        }
+    } catch (error) {
+        console.error("Error checking authentication token:", error);
+    }
+}
+
+// Usage
+checkAuthenticationToken();
+
+
+
 // Usage
 const projectKey = "your-project-key";
 const newBranch = "new-branch-name";
