@@ -1,0 +1,64 @@
+const fs = require('fs');
+const { promisify } = require('util');
+const writeFileAsync = promisify(fs.writeFile);
+
+async function fetchAndSaveIssuesToCSV(projectKey, pageSize) {
+    const baseUrl = 'https://your-sonarqube-instance';
+    const endpoint = '/api/issues/search';
+    let currentPage = 1;
+    let hasMorePages = true;
+
+    const csvData = []; // Array to store issue details for CSV
+
+    while (hasMorePages) {
+        const url = `${baseUrl}${endpoint}?projectKeys=${projectKey}&p=${currentPage}&ps=${pageSize}`;
+
+        try {
+            const response = await fetch(url);
+            const responseData = await response.json();
+
+            // Iterate through the issues and add details to csvData
+            for (const issue of responseData.issues) {
+                csvData.push([
+                    issue.key,
+                    issue.component,
+                    issue.severity,
+                    issue.message
+                    // Add more properties as needed
+                ]);
+            }
+
+            // Check if there are more pages to fetch
+            if (responseData.paging.total > (currentPage - 1) * pageSize) {
+                currentPage++;
+            } else {
+                hasMorePages = false;
+                console.log('Pagination complete');
+
+                // Save csvData to CSV file
+                await saveCsvToFile(csvData);
+            }
+        } catch (error) {
+            console.error('Error fetching issues:', error);
+            hasMorePages = false;
+        }
+    }
+}
+
+async function saveCsvToFile(csvData) {
+    try {
+        const csvHeader = 'Key,Component,Severity,Message\n'; // CSV header
+        const csvRows = csvData.map(row => row.join(',')); // Convert rows to comma-separated strings
+        const csvContent = csvHeader + csvRows.join('\n'); // Combine header and rows
+
+        await writeFileAsync('issues.csv', csvContent); // Write CSV content to a file
+        console.log('CSV file saved successfully');
+    } catch (error) {
+        console.error('Error saving CSV file:', error);
+    }
+}
+
+// Usage
+const projectKey = 'your-project-key';
+const pageSize = 100; // Set the appropriate page size
+fetchAndSaveIssuesToCSV(projectKey, pageSize);
