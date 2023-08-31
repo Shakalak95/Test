@@ -1,0 +1,32 @@
+// Initialize page counter and page size
+pm.environment.set('currentPage', 1);
+pm.environment.set('pageSize', 100); // Set the appropriate page size
+
+// Set up the endpoint URL
+const baseUrl = 'https://your-sonarqube-instance';
+const endpoint = '/api/issues/search';
+const projectKey = 'your-project-key';
+
+// Build the initial URL with parameters
+pm.environment.set('url', `${baseUrl}${endpoint}?projectKeys=${projectKey}&p=${pm.environment.get('currentPage')}&ps=${pm.environment.get('pageSize')}`);
+
+
+
+
+// Process the current response
+const responseData = pm.response.json();
+
+// Print or manipulate the response data as needed
+console.log('Page', pm.environment.get('currentPage'), 'Response:', responseData);
+
+// Increment the page counter
+pm.environment.set('currentPage', pm.environment.get('currentPage') + 1);
+
+// Check if there are more pages to fetch
+if (responseData.paging.total > (pm.environment.get('currentPage') - 1) * pm.environment.get('pageSize')) {
+    // Update the URL for the next page
+    pm.environment.set('url', `${baseUrl}${endpoint}?projectKeys=${projectKey}&p=${pm.environment.get('currentPage')}&ps=${pm.environment.get('pageSize')}`);
+    postman.setNextRequest(pm.info.requestName);
+} else {
+    console.log('Pagination complete');
+}
