@@ -1,0 +1,23 @@
+async function exportSonarQubeIssues() {
+    const baseUrl = "https://your-sonarqube-instance";
+    const projectKey = "your-project-key";
+
+    const apiUrl = `${baseUrl}/api/issues/search?projectKeys=${projectKey}`;
+
+    try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) {
+            throw new Error(`Request failed with status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data.issues; // Array of issues
+    } catch (error) {
+        console.error("Error exporting SonarQube issues:", error);
+    }
+}
+
+// Usage
+exportSonarQubeIssues().then(issues => {
+    console.log("Exported issues:", issues);
+});
