@@ -11,6 +11,23 @@ function waitForPageLoad() {
         observer.observe(document.body, { childList: true, subtree: true });
     });
 }
+
+function waitForPageLoad() {
+    return new Promise((resolve) => {
+        const observer = new MutationObserver((mutationsList, observer) => {
+            // Check if the new content has been loaded by observing changes
+            const newContentElement = document.querySelector('.new-content');
+            if (newContentElement) {
+                observer.disconnect(); // Stop observing
+                resolve(); // Page is loaded
+            }
+        });
+        
+        observer.observe(document.body, { childList: true, subtree: true });
+    });
+}
+
+
 function waitForPageLoad() {
     return new Promise((resolve) => {
         const observer = new MutationObserver((mutationsList, observer) => {
