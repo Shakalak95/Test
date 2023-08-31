@@ -1,0 +1,34 @@
+async function fetchIssues(projectKey, pageSize) {
+    const baseUrl = 'https://your-sonarqube-instance';
+    const endpoint = '/api/issues/search';
+    let currentPage = 1;
+    let hasMorePages = true;
+
+    while (hasMorePages) {
+        const url = `${baseUrl}${endpoint}?projectKeys=${projectKey}&p=${currentPage}&ps=${pageSize}`;
+        
+        try {
+            const response = await fetch(url);
+            const responseData = await response.json();
+            
+            // Print or manipulate the response data as needed
+            console.log('Page', currentPage, 'Response:', responseData);
+
+            // Check if there are more pages to fetch
+            if (responseData.paging.total > (currentPage - 1) * pageSize) {
+                currentPage++;
+            } else {
+                hasMorePages = false;
+                console.log('Pagination complete');
+            }
+        } catch (error) {
+            console.error('Error fetching issues:', error);
+            hasMorePages = false;
+        }
+    }
+}
+
+// Usage
+const projectKey = 'your-project-key';
+const pageSize = 100; // Set the appropriate page size
+fetchIssues(projectKey, pageSize);
