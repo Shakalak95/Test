@@ -21,3 +21,37 @@ async function exportSonarQubeIssues() {
 exportSonarQubeIssues().then(issues => {
     console.log("Exported issues:", issues);
 });
+async function changeSonarQubeBranch(projectKey, newBranch) {
+    const baseUrl = "https://your-sonarqube-instance";
+    const apiUrl = `${baseUrl}/api/settings/set`;
+
+    const payload = {
+        keys: `${projectKey}:sonar.branch`,
+        values: newBranch
+    };
+
+    try {
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Authorization': 'Bearer your-auth-token' // Replace with your authentication token
+            },
+            body: new URLSearchParams(payload)
+        });
+
+        if (!response.ok) {
+            throw new Error(`Request failed with status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("Project branch updated:", data);
+    } catch (error) {
+        console.error("Error changing SonarQube branch:", error);
+    }
+}
+
+// Usage
+const projectKey = "your-project-key";
+const newBranch = "new-branch-name";
+changeSonarQubeBranch(projectKey, newBranch);
