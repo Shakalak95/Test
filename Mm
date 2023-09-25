@@ -1,0 +1,16 @@
+Meeting minutes
+
+Planned to release in phase manner. 
+
+Phase 1
+
+1) Developer should not be able to view the generated DMLs until it is approved. 
+2) If DML is rejected during review, backout query generated for that particular registration should be executed automatically
+3) Include release fix version in register page
+
+Phase 2
+
+1) Jira integration to fetch details about EPIC, release, agile team, description - JIRA Generic account needed 
+2) Email Integration to send notification about workflow updates - Outlook Service account needed
+3) Along with displaying DML, show the details pre-populated in UI with information added by developer during registration ( Link to get screens from approval page ) 
+4) If rejected, Developer should be able to edit the DML and submit again for review instead of creating new - More discussion needed
