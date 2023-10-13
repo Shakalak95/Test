@@ -1,0 +1,33 @@
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
+
+public class JSONComparison {
+    public static void main(String[] args) {
+        String json1 = "{\"name\":\"John\",\"age\":30,\"city\":\"New York\"}";
+        String json2 = "{\"name\":\"Jane\",\"city\":\"Los Angeles\"}";
+
+        JsonObject jsonObject1 = JsonParser.parseString(json1).getAsJsonObject();
+        JsonObject jsonObject2 = JsonParser.parseString(json2).getAsJsonObject();
+
+        // Find keys missing in the second JSON
+        for (String key : jsonObject1.keySet()) {
+            if (!jsonObject2.has(key)) {
+                jsonObject2.add(key, JsonPrimitive.NULL);
+            }
+        }
+
+        // Find keys missing in the first JSON
+        for (String key : jsonObject2.keySet()) {
+            if (!jsonObject1.has(key)) {
+                jsonObject1.add(key, JsonPrimitive.NULL);
+            }
+        }
+
+        System.out.println("Left JSON: ");
+        System.out.println(jsonObject1.toString());
+
+        System.out.println("Right JSON: ");
+        System.out.println(jsonObject2.toString());
+    }
+}
